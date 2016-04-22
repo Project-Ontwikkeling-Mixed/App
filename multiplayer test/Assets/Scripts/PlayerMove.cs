@@ -14,11 +14,14 @@ public class PlayerMove : NetworkBehaviour {
 	float fireTimer = 1f;
 	float tempTime = 0f;
 
+
+    //[SyncVar]
+    //int counter = 1;
+
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
-		
-	}
+    }
 
 	public override void OnStartLocalPlayer()
 	{
@@ -27,14 +30,15 @@ public class PlayerMove : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        //GameObject.Find("Counter").GetComponent<Text>().text = counter.ToString();
 
-		//if (Input.touchCount > 0)
-		//{
-		//    CmdFire();
-		//}
+        //if (Input.touchCount > 0)
+        //{
+        //    CmdFire();
+        //}
 
-		
-		tempTime += Time.deltaTime;
+
+        tempTime += Time.deltaTime;
 
 		if (!isLocalPlayer)
 			return;
@@ -42,26 +46,44 @@ public class PlayerMove : NetworkBehaviour {
 		if(Input.touchCount > 0 || Input.GetButton("Fire1"))
 		{
 			rb.AddForce(Vector2.up * jumpSpeed);
-            GameObject.Find("Counter").GetComponent<Text>().text = (int.Parse(GameObject.Find("Counter").GetComponent<Text>().text) + 1).ToString();
+            if (!isServer)
+            {
+                CmdCounter();
+            }
+            
+
+            if (isServer)
+            {
+                //counter++;
+            }
+          
+            
 		}
 
 	}
 
-	//[Command]
-	//void CmdFire()
-	//{ 
-		
-		
-	//        if(tempTime > fireTimer)
-	//        {
-	//            tempTime = 0f;
+    [Command]
+    void CmdCounter()
+    {
+        GameObject.Find("Counter").GetComponent<Counter>().counter++;
+        print("counting!");
+    }
 
-	//            GameObject Fireball;
-	//            Fireball = Instantiate(fireB, transform.position, transform.rotation) as GameObject;
-	//            Fireball.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector3 (-velocity, 0));
+    //[Command]
+    //void CmdFire()
+    //{ 
 
-	//            NetworkServer.Spawn(Fireball);
-	//        }
-		
-	//}
+
+    //        if(tempTime > fireTimer)
+    //        {
+    //            tempTime = 0f;
+
+    //            GameObject Fireball;
+    //            Fireball = Instantiate(fireB, transform.position, transform.rotation) as GameObject;
+    //            Fireball.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector3 (-velocity, 0));
+
+    //            NetworkServer.Spawn(Fireball);
+    //        }
+
+    //}
 }
