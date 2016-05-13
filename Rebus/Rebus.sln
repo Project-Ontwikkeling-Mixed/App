@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{26FBAC39-B60F-46E7-DD01-BB2FC48A69A7}") = "Rebus", "Assembly-CSharp.csproj", "{256A7813-4D5D-1032-53A7-4AA80108D998}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{256A7813-4D5D-1032-53A7-4AA80108D998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{256A7813-4D5D-1032-53A7-4AA80108D998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{256A7813-4D5D-1032-53A7-4AA80108D998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{256A7813-4D5D-1032-53A7-4AA80108D998}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
