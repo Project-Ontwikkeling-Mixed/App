@@ -208,8 +208,8 @@ public class AntwoordGegevens : NetworkBehaviour
 
         GameObject.Find("Timer").GetComponent<Text>().text = Mathf.Round(timer) + " seconden";
 
-        GameObject.Find("Result").GetComponent<Text>().text = "Mijn antwoord: " + mijnAntwoord + " vijand antwoord: " + enemyAntwoord;
-        Debug.Log("Mijn antwoord: " + mijnAntwoord + " vijand antwoord: " + enemyAntwoord);
+        //GameObject.Find("Result").GetComponent<Text>().text = "Mijn antwoord: " + mijnAntwoord + " vijand antwoord: " + enemyAntwoord;
+        //Debug.Log("Mijn antwoord: " + mijnAntwoord + " vijand antwoord: " + enemyAntwoord);
 
         Debug.Log(serverSend + " " + clientSend);
         if (isServer && serverSend)
