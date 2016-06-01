@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/MPtest.unity
-  isLoaded: 1
-  isActive: 1
