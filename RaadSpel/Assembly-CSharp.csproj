@@ -45,13 +45,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\AntwoordGegevens.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Loading.cs" />
+     <Compile Include="Assets\Scripts\Login.cs" />
      <Compile Include="Assets\Scripts\Matchmaking.cs" />
+     <Compile Include="Assets\Scripts\Old\Vraag.cs" />
+     <Compile Include="Assets\Scripts\Old\antwoorden.cs" />
      <Compile Include="Assets\Scripts\Online.cs" />
-     <Compile Include="Assets\Scripts\Resultaat.cs" />
+     <Compile Include="Assets\Scripts\OpenCloseUI.cs" />
+     <Compile Include="Assets\Scripts\OpenWebPages.cs" />
+     <Compile Include="Assets\Scripts\QuestionClasses.cs" />
+     <Compile Include="Assets\Scripts\QuestionData.cs" />
+     <Compile Include="Assets\Scripts\ResultScript.cs" />
+     <Compile Include="Assets\Scripts\ToMenu.cs" />
      <Compile Include="Assets\Scripts\UIScript.cs" />
      <Compile Include="Assets\Scripts\commandScript.cs" />
+     <Compile Include="Assets\Scripts\inlogtest.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
