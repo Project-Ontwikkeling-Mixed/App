@@ -9,7 +9,7 @@ public class GameManager : NetworkBehaviour
 
     public bool sendAnswer = false;
     GameObject canvas;
-    
+
 
 
 
@@ -24,12 +24,13 @@ public class GameManager : NetworkBehaviour
 
     void Start()
     {
-        
+
 
         if (!isLocalPlayer)
         {
             return;
         }
+        Debug.Log("Local player present");
         name = "localObject";
 
         canvas = GameObject.Find("Canvas");
@@ -42,12 +43,13 @@ public class GameManager : NetworkBehaviour
     void Update()
     {
 
-        
+
 
         if (!isLocalPlayer)
         {
             return;
         }
+        Debug.Log("Local player present");
 
         if (SceneManager.GetActiveScene().name == "Loading" && !isServer)
         {
@@ -72,7 +74,7 @@ public class GameManager : NetworkBehaviour
             {
                 myAnswer = 3;
             }
-            
+
             else
             {
                 myAnswer = 0;
@@ -96,7 +98,7 @@ public class GameManager : NetworkBehaviour
         //{
         //    GameObject.Find("Volgende").GetComponent<Button>().interactable = true;
         //}
-        
+
 
 
 
@@ -120,7 +122,7 @@ public class GameManager : NetworkBehaviour
 
         if (sendAnswer == true)
         {
-            GameObject.Find("Result1").GetComponent<Text>().text = "send answer true";
+            //GameObject.Find("Result1").GetComponent<Text>().text = "send answer true";
             if (!isServer)
             {
                 CmdSendAnswer();

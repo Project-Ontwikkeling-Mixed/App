@@ -5,7 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 
-public class ResultScript : NetworkBehaviour {
+public class ResultScript : NetworkBehaviour
+{
 
     int RightAnswer;
     float HighestPercent = -1;
@@ -51,8 +52,9 @@ public class ResultScript : NetworkBehaviour {
     }
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         if (SceneManager.GetActiveScene().name != "Result")
         {
             return;
@@ -63,12 +65,13 @@ public class ResultScript : NetworkBehaviour {
         {
             readAnswers();
         }
-        
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
 
         if (SceneManager.GetActiveScene().name != "Result")
         {
@@ -101,7 +104,7 @@ public class ResultScript : NetworkBehaviour {
             {
                 GameObject.Find("NetworkManager").GetComponent<NetworkManager>().ServerChangeScene("Vraag");
             }
-            
+
         }
 
 
@@ -111,7 +114,7 @@ public class ResultScript : NetworkBehaviour {
             getResult();
         }
 
-        
+
 
         if (isServer)
         {
@@ -165,7 +168,7 @@ public class ResultScript : NetworkBehaviour {
 
             Debug.Log(e.Message);
         }
-        
+
 
 
         Answers = new string[AnswerAmount];
@@ -177,10 +180,10 @@ public class ResultScript : NetworkBehaviour {
 
 
 
-        for (int i = 2 ; i < 2 + AnswerAmount; i++)
+        for (int i = 2; i < 2 + AnswerAmount; i++)
         {
             Debug.Log("VraagNummer= " + QuestionNr);
-            Answers[i-2] = ThisQuestion[i];
+            Answers[i - 2] = ThisQuestion[i];
         }
 
         try
@@ -192,12 +195,12 @@ public class ResultScript : NetworkBehaviour {
             }
 
         }
-        catch (System.Exception e )
+        catch (System.Exception e)
         {
 
             Debug.Log(e.Message);
         }
-        
+
         for (int i = 0; i < Percents.Length; i++)
         {
             if (Percents[i] > HighestPercent)
@@ -214,7 +217,7 @@ public class ResultScript : NetworkBehaviour {
 
 
 
-        
+
 
 
 
@@ -227,7 +230,7 @@ public class ResultScript : NetworkBehaviour {
 
     [ClientRpc]
 
-    void RpcVraag(string[] vraag,string[] answers,float[] percents, int vraagNr)
+    void RpcVraag(string[] vraag, string[] answers, float[] percents, int vraagNr)
     {
         ThisQuestion = vraag;
         QuestionNr = vraagNr;
@@ -262,7 +265,7 @@ public class ResultScript : NetworkBehaviour {
         {
             if (ClientBool)
             {
-                //QuestionData.addScore(false);
+                QuestionData.addScore(false);
                 Debug.Log("Score added client 2");
                 GameObject.Find("Result").GetComponent<Text>().text = "Je hebt fout geraden!\nJe tegenstander heeft juist geraden!";
             }
@@ -295,11 +298,13 @@ public class ResultScript : NetworkBehaviour {
                 GameObject.Find("Result").GetComponent<Text>().text = "Je hebt fout geraden!\nJe tegenstander heeft ook fout geraden!";
             }
         }
+        resultShowed = true;
+        Debug.Log(this);
 
         if (isServer)
         {
-            //ServerScore = QuestionData.getScore(true);
-            //ClientScore = QuestionData.getScore(false);
+            ServerScore = QuestionData.getScore(true);
+            ClientScore = QuestionData.getScore(false);
             GameObject.Find("Scores").GetComponent<Text>().text = "Jouw score: " + ServerScore + "\nTegenstander score: " + ClientScore;
         }
         else
@@ -338,6 +343,6 @@ public class ResultScript : NetworkBehaviour {
             GameObject.Find("Results").GetComponent<Text>().text = GameObject.Find("Results").GetComponent<Text>().text + Answers[i] + ": " + Percents[i] + "%\n";
         }
 
-        resultShowed = true;
+
     }
 }

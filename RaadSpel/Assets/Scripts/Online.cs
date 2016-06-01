@@ -4,6 +4,7 @@ using UnityEngine.Networking;
 using UnityEngine.Networking.Match;
 using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.Networking.Types;
+using UnityEngine.SceneManagement;
 public class Online : MonoBehaviour {
 
 	NetworkManager nw;
@@ -108,6 +109,11 @@ public class Online : MonoBehaviour {
         nw.matchMaker.ListMatches(0, 20, "", nw.OnMatchList);
 
         StartCoroutine(joinOrCreate());
+    }
+
+    public void logOut()
+    {
+        SceneManager.LoadScene("Menu uitgelogd");
     }
 
     public IEnumerator joinOrCreate()

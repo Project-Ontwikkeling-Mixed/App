@@ -11,7 +11,7 @@ public class QuestionData : NetworkBehaviour
 {
     GameObject CanvasMain;
     GameObject CanvasSend;
-    
+
     //Antwoord in sync
     [SyncVar]
     public string ServerAnswer;
@@ -52,13 +52,14 @@ public class QuestionData : NetworkBehaviour
     bool scoreAdded = false;
 
 
-    void Start () {
+    void Start()
+    {
         if (SceneManager.GetActiveScene().name != "Vraag" && SceneManager.GetActiveScene().name != "Vraag2")
         {
             return;
         }
 
-        getDataPath(out ResultPath,out QuestionPath);
+        getDataPath(out ResultPath, out QuestionPath);
         //Debug.Log(QuestionPath);
 
 
@@ -70,14 +71,14 @@ public class QuestionData : NetworkBehaviour
 
 
 
-        
-        
-	
-	}
+
+
+
+    }
 
     void getVragenLijst()
     {
-        
+
         if (SceneManager.GetActiveScene().name != "Vraag" && SceneManager.GetActiveScene().name != "Vraag2")
         {
             return;
@@ -86,7 +87,7 @@ public class QuestionData : NetworkBehaviour
         {
             return;
         }
-        
+
         //Directory.CreateDirectory("gameData");
         //Debug.Log(vragenPath);
         //GameObject.Find("Result").GetComponent<Text>().text = vragenPath;
@@ -99,12 +100,12 @@ public class QuestionData : NetworkBehaviour
             //GameObject.Find("Result").GetComponent<Text>().text = "path doesnt exist";
 
             //vragenlijst opvragen bij vraag 1
-            
+
 
 
             if (!RequestSend)
             {
-                
+
                 www = new WWW("http://www.mixed.multimediatechnology.be/spel/genereervragen/5");
                 StartCoroutine(WaitForRequest(www));
                 RequestSend = true;
@@ -115,7 +116,7 @@ public class QuestionData : NetworkBehaviour
                 //var vraagTest = JsonUtility.FromJson<vragenlijst>(www.text);
                 var vraagTest = JsonUtility.FromJson<QuestionList>(www.text);
                 //Debug.Log(vraagTest.vragen[2].vraag);
-                QuestionList = new string[vraagTest.vragen.Count,15];
+                QuestionList = new string[vraagTest.vragen.Count, 15];
                 for (int i = 0; i < vraagTest.vragen.Count; i++)
                 {
                     QuestionList[i, 0] = vraagTest.vragen[i].vraag;
@@ -133,9 +134,9 @@ public class QuestionData : NetworkBehaviour
                         {
                             tempTotaal += vraagTest.vragen[i].antwoorden[p].aantal_gekozen;
                         }
-                        tempPercent= vraagTest.vragen[i].antwoorden[j].aantal_gekozen / tempTotaal * 100f;
+                        tempPercent = vraagTest.vragen[i].antwoorden[j].aantal_gekozen / tempTotaal * 100f;
                         tempPercent = (float)Math.Round(tempPercent, 1);
-                        
+
 
                         QuestionList[i, j + 2 + vraagTest.vragen[i].antwoorden.Count] = tempPercent.ToString();
                     }
@@ -143,7 +144,7 @@ public class QuestionData : NetworkBehaviour
                 //Ik heb eerst gewerkt met een array als simulatie om te vragen weer te geven. Daarna heb ik pas gewerkt aan het ophalen van vragen via JSON, 
                 //die dan in objecten werden geplaatst. Daarom dat ik ze nu terug in een array zet, wat misschien niet de beste methode is. 
                 QuestionNr = 1;
-                
+
 
                 //oude array voor simulatie
                 //vragenLijst = new string[5, 8] { { "In spark spoork noord zou ik graag ... zien","3", "Een speeltuin", "Een fabriek", "Een bos","15","65","20" },
@@ -161,24 +162,24 @@ public class QuestionData : NetworkBehaviour
                 return;
             }
 
-        StreamWriter outputStream = File.CreateText(QuestionPath);
-        outputStream.WriteLine(QuestionNr);
-        outputStream.WriteLine(QuestionList.GetLength(0));
-        outputStream.WriteLine(QuestionList.GetLength(1));
-        for (int i = 0; i < QuestionList.GetLength(0); i++)
-        {
-            for (int j = 0; j < QuestionList.GetLength(1); j++)
+            StreamWriter outputStream = File.CreateText(QuestionPath);
+            outputStream.WriteLine(QuestionNr);
+            outputStream.WriteLine(QuestionList.GetLength(0));
+            outputStream.WriteLine(QuestionList.GetLength(1));
+            for (int i = 0; i < QuestionList.GetLength(0); i++)
             {
-                if (QuestionList[i, j] != null)
+                for (int j = 0; j < QuestionList.GetLength(1); j++)
                 {
-                    outputStream.Write(QuestionList[i, j] + "*");
+                    if (QuestionList[i, j] != null)
+                    {
+                        outputStream.Write(QuestionList[i, j] + "*");
+                    }
                 }
+                outputStream.WriteLine();
             }
-            outputStream.WriteLine();
+            outputStream.Close();
         }
-        outputStream.Close();
-    }
-        
+
         else
         {
             //GameObject.Find("Result").GetComponent<Text>().text = "file does exist";
@@ -186,16 +187,16 @@ public class QuestionData : NetworkBehaviour
         //GameObject.Find("Result1").GetComponent<Text>().text = "vragen code running";
 
         StreamReader inputStream = File.OpenText(QuestionPath);
-            QuestionNr = int.Parse(inputStream.ReadLine());
+        QuestionNr = int.Parse(inputStream.ReadLine());
 
         int tempLength = int.Parse(inputStream.ReadLine());
-int tempWidth = int.Parse(inputStream.ReadLine());
-string[] tempVraagArr;
-QuestionList = new string[tempLength, tempWidth];
-        for (int i = 0; i<tempLength; i++)
+        int tempWidth = int.Parse(inputStream.ReadLine());
+        string[] tempVraagArr;
+        QuestionList = new string[tempLength, tempWidth];
+        for (int i = 0; i < tempLength; i++)
         {
             tempVraagArr = inputStream.ReadLine().Split('*');
-            for (int j = 0; j<tempVraagArr.Length; j++)
+            for (int j = 0; j < tempVraagArr.Length; j++)
             {
                 QuestionList[i, j] = tempVraagArr[j];
             }
@@ -221,19 +222,19 @@ QuestionList = new string[tempLength, tempWidth];
 
 
 
-        
+
 
 
         if (tempLength > QuestionNr && SceneManager.GetActiveScene().name == "Vraag2")
         {
             StreamWriter outputStream2 = File.CreateText(QuestionPath);
-outputStream2.WriteLine(QuestionNr+1);
+            outputStream2.WriteLine(QuestionNr + 1);
             outputStream2.WriteLine(tempLength);
             outputStream2.WriteLine(tempWidth);
 
-            for (int i = 0; i<QuestionList.GetLength(0); i++)
+            for (int i = 0; i < QuestionList.GetLength(0); i++)
             {
-                for (int j = 0; j<QuestionList.GetLength(1); j++)
+                for (int j = 0; j < QuestionList.GetLength(1); j++)
                 {
                     if (QuestionList[i, j] != null)
                     {
@@ -276,15 +277,16 @@ outputStream2.WriteLine(QuestionNr+1);
 
     [ClientRpc]
 
-    void RpcVraag(string[] vraag,int vraagNr)
+    void RpcVraag(string[] vraag, int vraagNr)
     {
         ThisQuestion = vraag;
         QuestionNr = vraagNr;
     }
 
     // Update is called once per frame
-    void Update () {
-        
+    void Update()
+    {
+
         if (SceneManager.GetActiveScene().name != "Vraag" && SceneManager.GetActiveScene().name != "Vraag2")
         {
             return;
@@ -295,8 +297,8 @@ outputStream2.WriteLine(QuestionNr+1);
         {
             getVragenLijst();
         }
-        
-        
+
+
 
         if (QuestionsReady)
         {
@@ -305,11 +307,11 @@ outputStream2.WriteLine(QuestionNr+1);
                 RpcVraag(ThisQuestion, QuestionNr);
             }
         }
-        
-        
+
+
         //Debug.Log(dezeVraag[0]);
 
-        
+
 
 
         if (isServer)
@@ -318,7 +320,7 @@ outputStream2.WriteLine(QuestionNr+1);
             {
                 Timer -= Time.deltaTime;
             }
-            
+
             MyAnswer = ServerAnswer;
             EnemyAnswer = ClientAnswer;
         }
@@ -341,7 +343,7 @@ outputStream2.WriteLine(QuestionNr+1);
         }
         if (!isServer && ClientSend)
         {
-            
+
             CanvasSend.SetActive(true);
         }
 
@@ -357,7 +359,7 @@ outputStream2.WriteLine(QuestionNr+1);
                 outputStream.WriteLine(ClientAnswer);
                 outputStream.Close();
             }
-            
+
 
             if (isServer)
             {
@@ -369,21 +371,21 @@ outputStream2.WriteLine(QuestionNr+1);
                         addScore(false);
                         scoreAdded = true;
                     }
-                    
+
                     GameObject.Find("NetworkManager").GetComponent<NetworkManager>().ServerChangeScene("Vraag2");
                 }
                 else if (SceneManager.GetActiveScene().name == "Vraag2")
                 {
                     GameObject.Find("NetworkManager").GetComponent<NetworkManager>().ServerChangeScene("Result");
                 }
-                
+
             }
         }
     }
 
 
 
-    
+
     public void answer1()
     {
         GameObject.Find("answer 2").GetComponent<Toggle>().isOn = false;
@@ -392,7 +394,7 @@ outputStream2.WriteLine(QuestionNr+1);
         {
             GameObject.Find("answer 4").GetComponent<Toggle>().isOn = false;
         }
-        
+
 
     }
     public void answer2()
@@ -403,7 +405,7 @@ outputStream2.WriteLine(QuestionNr+1);
         {
             GameObject.Find("answer 4").GetComponent<Toggle>().isOn = false;
         }
-        
+
     }
     public void answer3()
     {
@@ -413,7 +415,7 @@ outputStream2.WriteLine(QuestionNr+1);
         {
             GameObject.Find("answer 4").GetComponent<Toggle>().isOn = false;
         }
-        
+
     }
 
     public void answer4()
@@ -423,13 +425,13 @@ outputStream2.WriteLine(QuestionNr+1);
         GameObject.Find("answer 3").GetComponent<Toggle>().isOn = false;
     }
 
-    public static void getDataPath(out string resultPath,out string questionPath)
+    public static void getDataPath(out string resultPath, out string questionPath)
     {
         questionPath = "\\vragenLijst.mixed";
         resultPath = "\\antwoordGegevens.mixed";
         if (Application.platform == RuntimePlatform.Android)
         {
-            
+
             Directory.CreateDirectory(Application.persistentDataPath);
 
             resultPath = Application.persistentDataPath + resultPath;

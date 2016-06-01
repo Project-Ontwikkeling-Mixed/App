@@ -9,7 +9,7 @@ public class commandScript : MonoBehaviour {
 
 	public void validateAnswer()
     {
-        GameObject.Find("Result").GetComponent<Text>().text = "answer validated";
+        //GameObject.Find("Result").GetComponent<Text>().text = "answer validated";
         GameObject.Find("localObject").GetComponent<GameManager>().sendAnswer = true;
        
         
