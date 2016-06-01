@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Menu ingelogd 1.unity
+- path: Assets/Menu uitgelogd.unity
   isLoaded: 1
   isActive: 1

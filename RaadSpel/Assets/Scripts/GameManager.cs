@@ -9,7 +9,6 @@ public class GameManager : NetworkBehaviour
 
     public bool sendAnswer = false;
     GameObject canvas;
-
     
 
 
@@ -36,38 +35,68 @@ public class GameManager : NetworkBehaviour
         canvas = GameObject.Find("Canvas");
 
 
+
+
+
     }
     void Update()
     {
 
-
-
-        if (SceneManager.GetActiveScene().name != "Vraag" && SceneManager.GetActiveScene().name != "Vraag2")
-        {
-            return;
-        }
+        
 
         if (!isLocalPlayer)
         {
             return;
         }
 
-        if (GameObject.Find("answer 1").GetComponent<Toggle>().isOn)
+        if (SceneManager.GetActiveScene().name == "Loading" && !isServer)
         {
-            myAnswer = 1;
+            CmdConnected();
         }
-        else if (GameObject.Find("answer 2").GetComponent<Toggle>().isOn)
+        if (SceneManager.GetActiveScene().name != "Vraag" && SceneManager.GetActiveScene().name != "Vraag2")
         {
-            myAnswer = 2;
+            return;
         }
-        else if (GameObject.Find("answer 3").GetComponent<Toggle>().isOn)
+
+        try
         {
-            myAnswer = 3;
+            if (GameObject.Find("answer 1").GetComponent<Toggle>().isOn)
+            {
+                myAnswer = 1;
+            }
+            else if (GameObject.Find("answer 2").GetComponent<Toggle>().isOn)
+            {
+                myAnswer = 2;
+            }
+            else if (GameObject.Find("answer 3").GetComponent<Toggle>().isOn)
+            {
+                myAnswer = 3;
+            }
+            
+            else
+            {
+                myAnswer = 0;
+            }
+            //if (GameObject.Find("answer 4").GetComponent<Toggle>().isOn)
+            //{
+            //    myAnswer = 4;
+            //}
         }
-        else
+        catch (System.Exception e)
         {
-            myAnswer = 0;
+
+            //Debug.Log(e.Message);
         }
+
+        //if (myAnswer == 0)
+        //{
+        //    GameObject.Find("Volgende").GetComponent<Button>().interactable = false;
+        //}
+        //else
+        //{
+        //    GameObject.Find("Volgende").GetComponent<Button>().interactable = true;
+        //}
+        
 
 
 
@@ -84,20 +113,21 @@ public class GameManager : NetworkBehaviour
         }
         else if (isServer)
         {
-            GameObject.Find("EventSystem").GetComponent<AntwoordGegevens>().serverAntwoord = myAnswer.ToString();
+            GameObject.Find("EventSystem").GetComponent<QuestionData>().ServerAnswer = myAnswer.ToString();
         }
 
 
 
         if (sendAnswer == true)
         {
+            GameObject.Find("Result1").GetComponent<Text>().text = "send answer true";
             if (!isServer)
             {
                 CmdSendAnswer();
             }
             else if (isServer)
             {
-                GameObject.Find("EventSystem").GetComponent<AntwoordGegevens>().serverSend = true;
+                GameObject.Find("EventSystem").GetComponent<QuestionData>().ServerSend = true;
             }
         }
 
@@ -113,14 +143,23 @@ public class GameManager : NetworkBehaviour
 
     void CmdClientAntwoord(string antwoord)
     {
-        GameObject.Find("EventSystem").GetComponent<AntwoordGegevens>().clientAntwoord = antwoord;
+        GameObject.Find("EventSystem").GetComponent<QuestionData>().ClientAnswer = antwoord;
         Debug.Log("Client message: " + antwoord);
     }
 
     [Command]
     void CmdSendAnswer()
     {
-        GameObject.Find("EventSystem").GetComponent<AntwoordGegevens>().clientSend = true;
+        GameObject.Find("EventSystem").GetComponent<QuestionData>().ClientSend = true;
+    }
+
+
+    [Command]
+
+    void CmdConnected()
+    {
+        Debug.Log("Starting game...");
+        GameObject.Find("NetworkManager").GetComponent<NetworkManager>().ServerChangeScene("Vraag");
     }
 
 
