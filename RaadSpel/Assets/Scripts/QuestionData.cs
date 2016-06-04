@@ -20,7 +20,7 @@ public class QuestionData : NetworkBehaviour
 
     //timer
     [SyncVar]
-    public float Timer = 60;
+    public float Timer = 5;
 
     //lokaal antwoord
     public string MyAnswer;
@@ -52,6 +52,10 @@ public class QuestionData : NetworkBehaviour
     bool scoreAdded = false;
 
 
+
+    float timeOut = 2f;
+
+
     void Start()
     {
         if (SceneManager.GetActiveScene().name != "Vraag" && SceneManager.GetActiveScene().name != "Vraag2")
@@ -73,7 +77,7 @@ public class QuestionData : NetworkBehaviour
 
 
 
-
+        Timer = 60f;
     }
 
     void getVragenLijst()
@@ -225,7 +229,7 @@ public class QuestionData : NetworkBehaviour
 
 
 
-        if (tempLength > QuestionNr && SceneManager.GetActiveScene().name == "Vraag2")
+        if (SceneManager.GetActiveScene().name == "Vraag2")
         {
             StreamWriter outputStream2 = File.CreateText(QuestionPath);
             outputStream2.WriteLine(QuestionNr + 1);
@@ -238,7 +242,15 @@ public class QuestionData : NetworkBehaviour
                 {
                     if (QuestionList[i, j] != null)
                     {
-                        outputStream2.Write(QuestionList[i, j] + "*");
+                        if (QuestionList[i,j+1] != null)
+                        {
+                            outputStream2.Write(QuestionList[i, j] + "*");
+                        }
+                        else
+                        {
+                            outputStream2.Write(QuestionList[i, j]);
+                        }
+                        
 
                     }
                 }
@@ -283,6 +295,24 @@ public class QuestionData : NetworkBehaviour
         QuestionNr = vraagNr;
     }
 
+    [ClientRpc]
+
+    void RpcDisconnectedHost()
+    {
+        GameObject.Find("NetworkManager").GetComponent<NetworkManager>().offlineScene = "PlayerDisconnect";
+        Debug.Log("Disconnecting..");
+        GameObject.Find("NetworkManager").GetComponent<NetworkManager>().StopClient();
+    }
+
+    [ClientRpc]
+
+    void RpcDisconnectedClient()
+    {
+        GameObject.Find("NetworkManager").GetComponent<NetworkManager>().offlineScene = "TijdOp";
+        Debug.Log("Disconnecting.");
+        GameObject.Find("NetworkManager").GetComponent<NetworkManager>().StopClient();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -291,6 +321,8 @@ public class QuestionData : NetworkBehaviour
         {
             return;
         }
+
+        Debug.Log(ClientSend.ToString( )+ ServerSend.ToString());
 
 
         if (!QuestionsReady)
@@ -320,6 +352,29 @@ public class QuestionData : NetworkBehaviour
             {
                 Timer -= Time.deltaTime;
             }
+            else if(!ServerSend)
+            {
+                timeOut -= Time.deltaTime;
+                RpcDisconnectedHost();
+                GameObject.Find("NetworkManager").GetComponent<NetworkManager>().offlineScene = "TijdOp";
+                if (timeOut <= 0)
+                {
+                    GameObject.Find("NetworkManager").GetComponent<NetworkManager>().StopHost();
+                }
+                
+            }
+            else
+            {
+                timeOut -= Time.deltaTime;
+                RpcDisconnectedClient();
+                GameObject.Find("NetworkManager").GetComponent<NetworkManager>().offlineScene = "PlayerDisconnect";
+                if (timeOut <= 0)
+                {
+                    GameObject.Find("NetworkManager").GetComponent<NetworkManager>().StopHost();
+                }
+            }
+
+
 
             MyAnswer = ServerAnswer;
             EnemyAnswer = ClientAnswer;
@@ -328,6 +383,8 @@ public class QuestionData : NetworkBehaviour
         {
             MyAnswer = ClientAnswer;
             EnemyAnswer = ServerAnswer;
+
+
         }
 
         GameObject.Find("Timer").GetComponent<Text>().text = Mathf.Round(Timer) + " seconden";

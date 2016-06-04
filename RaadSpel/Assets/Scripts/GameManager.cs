@@ -49,7 +49,22 @@ public class GameManager : NetworkBehaviour
         {
             return;
         }
-        Debug.Log("Local player present");
+        if (SceneManager.GetActiveScene().name == "Result")
+        {
+            if (sendAnswer == true)
+            {
+                if (!isServer)
+                {
+                    Debug.Log("send");
+                    CmdSendAnswer2();
+                }
+                else
+                {
+                    GameObject.Find("EventSystem").GetComponent<ResultScript>().ServerSend = true;
+                }
+                
+            }
+        }
 
         if (SceneManager.GetActiveScene().name == "Loading" && !isServer)
         {
@@ -122,6 +137,7 @@ public class GameManager : NetworkBehaviour
 
         if (sendAnswer == true)
         {
+
             //GameObject.Find("Result1").GetComponent<Text>().text = "send answer true";
             if (!isServer)
             {
@@ -145,15 +161,35 @@ public class GameManager : NetworkBehaviour
 
     void CmdClientAntwoord(string antwoord)
     {
-        GameObject.Find("EventSystem").GetComponent<QuestionData>().ClientAnswer = antwoord;
-        Debug.Log("Client message: " + antwoord);
+            GameObject.Find("EventSystem").GetComponent<QuestionData>().ClientAnswer = antwoord;
+            Debug.Log("Client message: " + antwoord);
+
+
+        
     }
 
     [Command]
     void CmdSendAnswer()
     {
-        GameObject.Find("EventSystem").GetComponent<QuestionData>().ClientSend = true;
+        //Debug.Log("command send answer received");
+        if (SceneManager.GetActiveScene().name == "Vraag" || SceneManager.GetActiveScene().name == "Vraag2")
+        {
+            GameObject.Find("EventSystem").GetComponent<QuestionData>().ClientSend = true;
+        }
+        else if (SceneManager.GetActiveScene().name != "Result")
+        {
+            GameObject.Find("EventSystem").GetComponent<ResultScript>().ClientSend = true;
+        }
     }
+
+    [Command]
+    void CmdSendAnswer2()
+    {
+
+        GameObject.Find("EventSystem").GetComponent<ResultScript>().ClientSend = true;
+
+    }
+
 
 
     [Command]

@@ -5,6 +5,7 @@ using UnityEngine.Networking.Match;
 using UnityEngine.Networking.NetworkSystem;
 using UnityEngine.Networking.Types;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 public class Online : MonoBehaviour {
 
 	NetworkManager nw;
@@ -16,6 +17,15 @@ public class Online : MonoBehaviour {
 	void Start () {
 		nw = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
 		nwMatch = gameObject.AddComponent<NetworkMatch>();
+        if (SceneManager.GetActiveScene().name == "Menu ingelogd")
+        {
+            GameObject.Find("username").GetComponent<Text>().text = PlayerPrefs.GetString("username");
+        }
+        else if (SceneManager.GetActiveScene().name != "Menu uitgelogd")
+        {
+            PlayerPrefs.SetString("username", null);
+        }
+        
 	}
 	
 	// Update is called once per frame
